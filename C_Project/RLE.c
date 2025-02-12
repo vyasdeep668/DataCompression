@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DATA_SIZE 128
+#define DATA_SIZE 65536
 
 #if DATA_SIZE == 128
     #define FILE_PATH "../Dataset/Data/dataset_128.bin"
