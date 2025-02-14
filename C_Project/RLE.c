@@ -62,8 +62,8 @@ size_t byte_compress(uint8_t* data_ptr, size_t data_size)
 
         if (count > 1) 
         {
-            data_ptr[write_idx++] = (uint8_t)count;
             data_ptr[write_idx++] = current_byte | 0x80;        // Since Data is 7-bit, MSB is set to 1 to indicate a run
+            data_ptr[write_idx++] = (uint8_t)count;
         } else 
         {
             data_ptr[write_idx++] = current_byte & 0x7F;
@@ -97,11 +97,11 @@ size_t byte_decompress(uint8_t* data_ptr, size_t compressed_size)
     while (read_idx < compressed_size) {
         uint8_t byte = temp_buffer[read_idx];
 
-        // Check if the next byte has the MSB set (indicating a run)
-        if (read_idx + 1 < compressed_size && (temp_buffer[read_idx + 1] & 0x80)) 
+        // Check if byte has the MSB set (indicating a run)
+        if(byte & 0x80 && read_idx + 1 < compressed_size) 
         {
-            uint8_t count = byte; 
-            uint8_t value = temp_buffer[read_idx + 1] & 0x7F; 
+            uint8_t count = temp_buffer[read_idx + 1]; 
+            uint8_t value = byte & 0x7F; 
             memset(&data_ptr[write_idx], value, count);
             write_idx += count;
             read_idx += 2; 
